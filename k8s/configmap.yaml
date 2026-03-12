@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: ai-support
+data:
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "customer_support"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  LOG_LEVEL: "INFO"
+  APP_ENV: "production"

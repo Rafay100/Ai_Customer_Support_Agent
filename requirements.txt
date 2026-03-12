@@ -1,0 +1,41 @@
+# FastAPI & Server
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+pydantic-settings
+
+# Database
+sqlalchemy
+psycopg2-binary
+aiosqlite
+pgvector
+
+# Message Queue
+kafka-python-ng
+confluent-kafka
+
+# AI/LLM
+openai
+langchain
+langchain-community
+sentence-transformers
+
+# Channels
+twilio
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+
+# Utilities
+python-dotenv
+httpx
+aiohttp
+python-jose[cryptography]
+passlib[bcrypt]
+tenacity
+
+# Testing
+pytest
+pytest-asyncio

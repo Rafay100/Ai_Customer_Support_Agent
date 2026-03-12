@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-support-api
+  namespace: ai-support
+  labels:
+    app: ai-support-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ai-support-api
+  template:
+    metadata:
+      labels:
+        app: ai-support-api
+    spec:
+      containers:
+      - name: api
+        image: your-registry/ai-support-agent:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres-service:5432/customer_support"
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-service:9092"
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DATABASE_USER
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DATABASE_PASSWORD
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: OPENAI_API_KEY
+        envFrom:
+        - configMapRef:
+            name: app-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      imagePullSecrets:
+      - name: registry-secret
